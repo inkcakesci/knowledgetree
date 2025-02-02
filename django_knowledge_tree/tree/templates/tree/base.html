@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Knowledge Tree{% endblock %}</title>
+    <!-- 引入 sb-admin-2 的 CSS（确保 static 目录中有对应文件） -->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        <!-- 可在此添加侧边栏等内容 -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

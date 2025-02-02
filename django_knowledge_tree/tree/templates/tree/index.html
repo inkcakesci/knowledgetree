@@ -1,0 +1,9 @@
+{% extends 'tree/base.html' %}
+{% block title %}知识树浏览{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">知识树浏览</h1>
+    <pre>{{ tree }}</pre>
+    <a href="{% url 'tree:edit' %}" class="btn btn-primary">编辑知识树</a>
+</div>
+{% endblock %}
