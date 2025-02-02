@@ -1,14 +1,12 @@
 {% extends 'tree/base.html' %}
-{% block title %}编辑知识树{% endblock %}
+{% load static %}
+{% block title %}编辑知识点树{% endblock %}
 {% block content %}
 <div class="container-fluid">
-    <h1 class="h3 mb-4 text-gray-800">编辑知识树</h1>
+    <h1 class="h3 mb-4 text-gray-800">编辑知识点树</h1>
     <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.data.label_tag }} 
-            {{ form.data }}
-        </div>
+        {{ form.as_p }}
         <button type="submit" class="btn btn-success">保存</button>
         <a href="{% url 'tree:index' %}" class="btn btn-secondary">返回</a>
     </form>

@@ -1,0 +1,69 @@
+{% extends 'tree/base.html' %}
+{% load static %}
+{% block title %}{{ tree.title }} - 知识点树展示{% endblock %}
+{% block extra_head %}
+  <!-- 引入 jsTree 的样式 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+  <style>
+    /* 简单样式分列显示 */
+    .tree-container {
+      display: flex;
+      gap: 20px;
+    }
+    .tree-graphic, .tree-json {
+      flex: 1;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      background: #f8f9fc;
+    }
+    .tree-json pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">{{ tree.title }}</h1>
+    
+    <div class="tree-container">
+        <!-- 左侧：图形化知识点树 -->
+        <div class="tree-graphic">
+            <h5>图形化展示</h5>
+            <div id="knowledge-tree"></div>
+        </div>
+        <!-- 右侧：显示 JSON 原文 -->
+        <div class="tree-json">
+            <h5>JSON 原文</h5>
+            <pre>{{ tree_json_str }}</pre>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'tree:edit_tree' tree.id %}" class="btn btn-primary">编辑</a>
+        <!-- 删除按钮：使用一个表单提交 -->
+        <form method="post" action="{% url 'tree:delete_tree' tree.id %}" style="display:inline;" onsubmit="return confirm('确定要删除该知识点树吗？');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">删除</button>
+        </form>
+        <a href="{% url 'tree:index' %}" class="btn btn-secondary">返回列表</a>
+    </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+  <!-- 引入 jsTree 的脚本 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        // 将传递过来的 JSON 字符串解析为 JS 对象
+        var treeData = JSON.parse('{{ tree_json_str|escapejs }}');
+        $('#knowledge-tree').jstree({
+            'core': {
+                'data': treeData
+            }
+        });
+    });
+  </script>
+{% endblock %}

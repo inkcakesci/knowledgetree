@@ -4,11 +4,15 @@ from .models import KnowledgeTree
 class KnowledgeTreeForm(forms.ModelForm):
     class Meta:
         model = KnowledgeTree
-        fields = ['data']
+        fields = ['title', 'data']
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': '请输入知识点树名称'
+            }),
             'data': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 20,
-                'placeholder': '请以 JSON 格式录入知识树结构，例如：{"学科": {"课本名": {"章节": ["知识点1", "知识点2"]}}}'
-            }),
+                'placeholder': '请输入 JSON 格式的知识点树数据'
+            })
         }
