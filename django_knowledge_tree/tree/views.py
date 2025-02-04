@@ -23,8 +23,10 @@ def edit_tree(request, tree_id=None):
     if tree_id:
         tree_instance = get_object_or_404(KnowledgeTree, id=tree_id)
     else:
-        # 如果未提供 id，则创建新记录
-        tree_instance = KnowledgeTree.objects.create(title="新知识点树", data={})
+        # 如果没有 tree_id，才创建新的知识点树
+        tree_instance, created = KnowledgeTree.objects.get_or_create(title="新知识点树")
+        # 这里的 get_or_create 确保只创建一个新的知识点树，避免重复插入
+        # 如果已有相同标题的知识点树，直接获取
     if request.method == 'POST':
         form = KnowledgeTreeForm(request.POST, instance=tree_instance)
         if form.is_valid():
@@ -36,6 +38,7 @@ def edit_tree(request, tree_id=None):
         'form': form,
         'tree_id': tree_instance.id
     })
+
 
 def delete_tree(request, tree_id):
     tree_instance = get_object_or_404(KnowledgeTree, id=tree_id)
