@@ -2,25 +2,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Knowledge Tree{% endblock %}</title>
-    <!-- 引入 sb-admin-2 的最小化 CSS 文件 -->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
-    {% block extra_head %}{% endblock %}
+  <meta charset="UTF-8">
+  <title>{% block title %}Knowledge Tree{% endblock %}</title>
+  <!-- 引入 sb-admin-2 的 CSS -->
+  <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
 </head>
 <body id="page-top">
-    <div id="wrapper">
-        <!-- 可添加侧边栏或其他页面结构 -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                {% block content %}{% endblock %}
-            </div>
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-laugh-wink"></i>
         </div>
+        <div class="sidebar-brand-text mx-3">Knowledge Tree</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        功能
+      </div>
+
+      <!-- Nav Item - 知识点树管理 -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'tree:index' %}">
+          <i class="fas fa-fw fa-book"></i>
+          <span>知识点树管理</span>
+        </a>
+      </li>
+
+      <!-- Nav Item - 录入 -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'tree:create_tree' %}">
+          <i class="fas fa-fw fa-edit"></i>
+          <span>录入新知识点树</span>
+        </a>
+      </li>
+
+      <!-- 新增用户认证导航项：登录或注销 -->
+      <li class="nav-item">
+        {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'logout' %}">
+            <i class="fas fa-sign-out-alt fa-fw"></i>
+            <span>注销 ({{ user.username }})</span>
+          </a>
+        {% else %}
+          <a class="nav-link" href="{% url 'login' %}">
+            <i class="fas fa-sign-in-alt fa-fw"></i>
+            <span>登录</span>
+          </a>
+        {% endif %}
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+            <!-- 可在此处保留其他顶部导航内容 -->
+          </ul>
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          {% block content %}{% endblock %}
+        </div>
+        <!-- End Page Content -->
+      </div>
+      <!-- End Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2025</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End Footer -->
     </div>
-    <!-- 在页面底部引入 jQuery 和 sb-admin-2 的脚本 -->
-    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-    <!-- 下面两个 sb-admin-2 脚本可以根据需要选择使用其一个或者都引入 -->
-    <script src="{% static 'js/sb-admin-2.js' %}"></script>
-    {% block extra_scripts %}{% endblock %}
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- 脚本部分 -->
+  <!-- 通过 CDN 加载 jQuery（或者使用本地静态文件） -->
+  <script src="{% static 'js/jquery-3.7.1.min.js" integrity="sha256-7c0ldupnRVwPPNlK8j6J/5b4C2k2UOU93N3a56hB1os=" crossorigin="anonymous"></script>
+  <!-- 加载本地 Popper.js -->
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <!-- 加载 Bootstrap Bundle（包括 Dropdown 组件）-->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4/JqsZ2H9b5RHqOw6WJxX/e0dAm/1cJkoS1tifEfV6xw5J3G3FWPPCb1y" crossorigin="anonymous"></script>
+  <!-- 加载 sb-admin-2 的 JS -->
+  <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>

@@ -4,7 +4,9 @@ from django.urls import reverse
 from .models import KnowledgeTree
 from .forms import KnowledgeTreeForm
 import json
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from .forms import RegistrationForm
 def index(request):
     # 列出所有的知识点树
     trees = KnowledgeTree.objects.all()
@@ -19,6 +21,7 @@ def view_tree(request, tree_id):
         'tree_json_str': tree_json_str  # 注意这里传递的是字符串
     })
 
+@login_required
 def edit_tree(request, tree_id=None):
     if tree_id:
         tree_instance = get_object_or_404(KnowledgeTree, id=tree_id)
@@ -39,7 +42,7 @@ def edit_tree(request, tree_id=None):
         'tree_id': tree_instance.id
     })
 
-
+@login_required
 def delete_tree(request, tree_id):
     tree_instance = get_object_or_404(KnowledgeTree, id=tree_id)
     if request.method == 'POST':
@@ -61,3 +64,14 @@ def update_tree_api(request):
             tree_instance.save()
         return JsonResponse({'message': '知识树更新成功'})
     return JsonResponse({'error': '仅支持 POST 请求'}, status=405)
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # 自动登录新用户
+            return redirect('tree:index')
+    else:
+        form = RegistrationForm()
+    return render(request, 'tree/register.html', {'form': form})

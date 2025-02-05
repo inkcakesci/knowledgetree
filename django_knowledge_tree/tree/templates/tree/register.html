@@ -1,0 +1,29 @@
+{% extends "tree/base.html" %}
+{% load static %}
+{% block title %}注册{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-5">
+          <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-4">创建新账号</h1>
+          </div>
+          <form method="post" class="user">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-user btn-block">
+              注册
+            </button>
+          </form>
+          <hr>
+          <div class="text-center">
+            <a class="small" href="{% url 'login' %}">已有账号？登录</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
