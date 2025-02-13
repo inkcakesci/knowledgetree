@@ -1,1 +1,8 @@
 .venv
+*/__pycache__/*
+*.pyc
+django_knowledge_tree/knowledge_tree/__pycache__
+django_knowledge_tree/knowledge_tree/migrations/__pycache__ 
+django_knowledge_tree/knowledge_tree/migrations/*.pyc
+django_knowledge_tree/knowledge_tree/tree/__pycache__
+django_knowledge_tree/knowledge_tree/tree/migrations/__pycache__

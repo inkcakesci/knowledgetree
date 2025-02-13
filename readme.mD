@@ -114,12 +114,12 @@ docker run -p 8000:8000 django_knowledge_tree
 - **text**：字符串类型，表示节点要显示的文本内容。
 - **children**：数组类型，包含该节点的子节点。如果该节点没有子节点，可以设为一个空数组或省略此字段。
 
-## Prompt样例
+## Prompt样例1
 
 如果你希望利用 AI（如 ChatGPT、DeepSeek）生成符合上述格式的 JSON，可以使用类似下面的提示语（Prompt）：
 
-```
-请生成一份符合 jsTree 格式的 JSON 知识点树，要求如下：  
+```markdown
+你是一名专业的教辅资料整理教师，请生成一份符合 jsTree 格式的 JSON 知识点树，要求如下：  
 - 根节点名称为 "[科目]"。  
 - 根节点下有一个子节点 "[课本名称]"。
 - 该子节点下包含多个单元或章节。
@@ -131,9 +131,16 @@ docker run -p 8000:8000 django_knowledge_tree
 ```
 （请在 “XXXXXX” 中填入具体的课本名称，例如 “人教版高中英语必修一 (高一上册)”。）
 
-## 样例输出（ChatGPT4o（联网））：
-```
-{"id": "subject", "text": "英语", "children": [{"id": "textbook", "text": "人教版英语必修2", "children": [{"id": "unit1", "text": "Unit 1 Cultural Relics", "children": [{"id": "unit1_topic", "text": "主题：文化遗产"}, {"id": "unit1_vocabulary", "text": "词汇", "children": [{"id": "unit1_vocab1", "text": "cultural relics: 文化遗产"}, {"id": "unit1_vocab2", "text": "unearthed: 出土的"}, {"id": "unit1_vocab3", "text": "dynasty: 朝代"}]}, {"id": "unit1_grammar", "text": "语法", "children": [{"id": "unit1_grammar1", "text": "定语从句的用法"}]}, {"id": "unit1_reading", "text": "阅读", "children": [{"id": "unit1_reading1", "text": "课文：A Cultural Relic"}]}]}, {"id": "unit2", "text": "Unit 2 The Olympic Games", "children": [{"id": "unit2_topic", "text": "主题：奥林匹克运动会"}, {"id": "unit2_vocabulary", "text": "词汇", "children": [{"id": "unit2_vocab1", "text": "athlete: 运动员"}, {"id": "unit2_vocab2", "text": "stadium: 体育场"}, {"id": "unit2_vocab3", "text": "medal: 奖牌"}]}, {"id": "unit2_grammar", "text": "语法", "children": [{"id": "unit2_grammar1", "text": "过去完成时的用法"}]}, {"id": "unit2_reading", "text": "阅读", "children": [{"id": "unit2_reading1", "text": "课文：The Ancient Olympics"}]}]}, {"id": "unit3", "text": "Unit 3 Computers", "children": [{"id": "unit3_topic", "text": "主题：计算机"}, {"id": "unit3_vocabulary", "text": "词汇", "children": [{"id": "unit3_vocab1", "text": "software: 软件"}, {"id": "unit3_vocab2", "text": "hardware: 硬件"}, {"id": "unit3_vocab3", "text": "network: 网络"}]}, {"id": "unit3_grammar", "text": "语法", "children": [{"id": "unit3_grammar1", "text": "动词不定式的用法"}]}, {"id": "unit3_reading", "text": "阅读", "children": [{"id": "unit3_reading1", "text": "课文：The Computer Age"}]}]}, {"id": "unit4", "text": "Unit 4 Wildlife Protection", "children": [{"id": "unit4_topic", "text": "主题：野生动物保护"}, {"id": "unit4_vocabulary", "text": "词汇", "children": [{"id": "unit4_vocab1", "text": "endangered: 濒危的"}, {"id": "unit4_vocab2", "text": "habitat: 栖息地"}, {"id": "unit4_vocab3", "text": "conservation: 保护"}]}, {"id": "unit4_grammar", "text": "语法", "children": [{"id": "unit4_grammar1", "text": "被动语态的用法"}]}, {"id": "unit4_reading", "text": "阅读", "children": [{"id": "unit4_reading1", "text": "课文：Saving the Tigers"}]}]}, {"id": "unit5", "text": "Unit 5 Music", "children": [{"id": "unit5_topic", "text": "主题：音乐"}, {"id": "unit5_vocabulary", "text": "词汇", "children": [{"id": "unit5_vocab1", "text": "symphony: 交响乐"}, {"id": "unit5_vocab2", "text": "composer: 作曲家"}, {"id": "unit5_vocab3", "text": "orchestra: 管弦乐队"}]}, {"id": "unit5_grammar", "text": "语法", "children": [{"id": "unit5_grammar1", "text": "动名词的用法"}]}, {"id": "unit5_reading", "text": "阅读", "children": [{"id": "unit5_reading1", "text": "课文：The Sound of Music"}]}]}]}]}
+## Prompt样例2
+```markdown
+你是一名专业的教辅资料整理教师，请生成一份符合 jsTree 格式的 JSON 知识点树，要求如下：  
+- 根节点名称为 "[科目]"。  
+- 根节点下有一个子节点 "{年级+上下册}"。
+- 该子节点下包含多个单元或章节。
+- 每个单元下包含详细的知识点内容。请详细搜索相关教材内容，确保内容尽量完整和准确。  
+- 请确保生成的 JSON 数据结构符合 jsTree 的嵌套格式，并为每个节点指定唯一的 id。  
+- 参考现有的成熟教辅资料和参考书，如曲一线、王后雄等教辅。
+现在要求你生成：《人教版初中日语》的知识点树，以 JSON 格式返回，对于日语这一科目，着重考虑语法点和考点等，请提供完整的从初一到初三的所有课本内容。
 ```
 
 
@@ -142,3 +149,44 @@ docker run -p 8000:8000 django_knowledge_tree
 ### 2025年2月4日：
 
 修正了一次创建新知识点树会生成2个的逻辑错误。
+
+### 2025年2月10日：
+数据库改为使用PostgreSQL
+```bash
+docker run --name postgres -e POSTGRES_USER=klgtree -e POSTGRES_PASSWORD=klgtree123 -e POSTGRES_DB=knowledge_tree -p 5432:5432 -d postgres
+```
+# 数据库备份方法：
+
+在 Docker 容器中，`/temp` 目录通常不存在。
+
+**解决方案**：
+
+1. **使用容器内存在的目录**：
+
+   您可以将备份文件输出到容器内已存在的目录，例如 `/tmp`。
+
+   修改您的命令如下：
+
+   ```bash
+   docker exec -t postgres pg_dump -U klgtree knowledge_tree -f /tmp/backup.sql
+   ```
+
+   这将把备份文件保存到容器内的 `/tmp` 目录。
+
+2. **将备份文件复制到宿主机**：
+
+   备份完成后，您可以使用 `docker cp` 命令将备份文件从容器复制到宿主机：
+
+   ```bash
+   docker cp postgres:/tmp/backup.sql /path/to/host/backup.sql
+   ```
+
+   请将 `/path/to/host/backup.sql` 替换为您希望在宿主机上保存备份文件的路径。
+
+3. **清理容器内的备份文件**：
+
+   备份完成后，您可以删除容器内的临时备份文件：
+
+   ```bash
+   docker exec postgres rm /tmp/backup.sql
+   ```

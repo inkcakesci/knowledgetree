@@ -6,7 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = '114514' # 临时使用的密钥
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0"]
+
 
 # 应用配置：增加 tree 应用
 INSTALLED_APPS = [
@@ -54,13 +55,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'knowledge_tree.wsgi.application'
 
-# 使用默认 sqlite 数据库（生产环境请替换为合适的数据库配置）
+# 改为 PostgreSQL 数据库配置
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'knowledge_tree',  
+        'USER': 'klgtree',  
+        'PASSWORD': 'klgtree123',  
+        'HOST': 'localhost', 
+        'PORT': '5432', 
+    }
+}
+
+# 旧的 sqlite 数据库配置
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}'''
+
 
 # 国际化和静态文件配置
 LANGUAGE_CODE = 'zh-hans'
