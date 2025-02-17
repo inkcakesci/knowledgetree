@@ -12,10 +12,28 @@ def index(request):
     trees = KnowledgeTree.objects.all()
     return render(request, 'tree/index.html', {'trees': trees})
 
+def add_keywords(node):
+    """
+    给每个节点添加关键字字段，若没有关键字字段时，防止报错。
+    """
+    # 检查节点是否有关键字，如果没有就添加一个空列表
+    if 'keywords' not in node:
+        node['keywords'] = []
+    
+    # 递归处理子节点
+    if 'children' in node:
+        for child in node['children']:
+            add_keywords(child)
+
 def view_tree(request, tree_id):
     tree_instance = get_object_or_404(KnowledgeTree, id=tree_id)
-    # 将 data 字段序列化为 JSON 字符串
-    tree_json_str = json.dumps(tree_instance.data, ensure_ascii=False)
+    tree_data = tree_instance.data
+    
+    # 为每个节点添加关键字字段
+    add_keywords(tree_data)
+    
+    tree_json_str = json.dumps(tree_data, ensure_ascii=False)
+    
     return render(request, 'tree/tree_view.html', {
         'tree': tree_instance,
         'tree_json_str': tree_json_str  # 注意这里传递的是字符串
