@@ -2,15 +2,13 @@
 {% load static %}
 {% block title %}{{ tree.title }} - 知识点树展示{% endblock %}
 {% block extra_head %}
-  <!-- 引入 jsTree 的样式 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
   <style>
-    /* 简单样式分列显示 */
     .tree-container {
       display: flex;
       gap: 20px;
     }
-    .tree-graphic, .tree-json {
+    .tree-graphic, .tree-json, .keywords-display {
       flex: 1;
       border: 1px solid #ddd;
       padding: 10px;
@@ -21,6 +19,22 @@
       margin: 0;
       white-space: pre-wrap;
       word-wrap: break-word;
+    }
+    /* 样式设置：显示关键词框 */
+    .keywords-display {
+      position: relative;
+      height: 200px;
+    }
+    .keywords-list {
+      margin-top: 10px;
+      list-style-type: none;
+      padding: 0;
+    }
+    .keywords-list li {
+      background-color: #f0f0f0;
+      padding: 5px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
     }
   </style>
 {% endblock %}
@@ -39,6 +53,13 @@
             <h5>JSON 原文</h5>
             <pre>{{ tree_json_str }}</pre>
         </div>
+        <!-- 右侧：显示关键词 -->
+        <div class="keywords-display">
+            <h5>关键词</h5>
+            <ul class="keywords-list" id="keywords-list">
+                <li>暂无关键词</li>
+            </ul>
+        </div>
     </div>
 
     <div class="mt-3">
@@ -53,17 +74,35 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-  <!-- 引入 jsTree 的脚本 -->
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function(){
-        // 将传递过来的 JSON 字符串解析为 JS 对象
-        var treeData = JSON.parse('{{ tree_json_str|escapejs }}');
-        $('#knowledge-tree').jstree({
-            'core': {
-                'data': treeData
-            }
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+      var treeData = JSON.parse('{{ tree_json_str|escapejs }}');
+
+      // 初始化 jsTree
+      $('#knowledge-tree').jstree({
+          'core': {
+              'data': treeData  // 直接传递完整的数据给 jsTree
+          }
+      });
+
+      // 监听节点点击事件
+      $('#knowledge-tree').on('select_node.jstree', function (e, data) {
+          var node = data.node;
+          var keywords = node.original.keywords || ["暂无关键词"];  // 获取节点的 keywords
+
+          // 显示关键词到页面右侧框
+          var keywordsList = $("#keywords-list");
+          keywordsList.empty();  // 清空现有内容
+          if (keywords.length > 0) {
+              keywords.forEach(function(keyword) {
+                  keywordsList.append('<li>' + keyword + '</li>');
+              });
+          } else {
+              keywordsList.append('<li>暂无关键词</li>');
+          }
+      });
     });
-  </script>
+  </script>  
 {% endblock %}

@@ -1,9 +1,10 @@
 
 # django_knowledge_tree
 
-项目名：没想好。
+## 项目名：知识点树管理系统
 
-摘要：使用 NoSQL（JSON）方式存储知识点树数据，支持知识点树的编辑、保存、删除，通过前端组件（如 jsTree）将 JSON 数据以图形化树形结构展示。
+### 项目摘要：
+该项目是一个基于 Django 和 PostgreSQL 构建的知识点树管理系统。通过使用 JSON 存储知识点数据，支持知识点树的创建、编辑、删除等操作，并通过前端组件（如 jsTree）将 JSON 数据可视化为树形结构，方便用户管理和查询。
 
 ## 项目结构
 
@@ -13,10 +14,10 @@ django_knowledge_tree/
 ├── manage.py
 ├── requirements.txt
 ├── knowledge_tree/          # 主 Django 工程目录
-│   ├── __init__.py
-│   ├── settings.py          # Django 配置文件
-│   ├── urls.py              # 项目级 URL 配置
-│   └── wsgi.py              # WSGI 入口
+│   ├── __init__.py
+│   ├── settings.py          # Django 配置文件
+│   ├── urls.py              # 项目级 URL 配置
+│   └── wsgi.py              # WSGI 入口
 └── tree/                    # 应用目录，包含模型、视图、模板、静态文件等
     ├── __init__.py
     ├── models.py            # 模型定义（知识点树记录）
@@ -24,28 +25,28 @@ django_knowledge_tree/
     ├── views.py             # 视图函数，包括知识点树的创建、编辑、展示、删除等
     ├── urls.py              # 应用级 URL 配置
     ├── templates/
-    │   └── tree/
-    │       ├── base.html         # 基础模板，包含全局静态资源加载（jQuery、Bootstrap、sb-admin-2 等）
-    │       ├── index.html        # 知识点树列表页
-    │       ├── edit.html         # 编辑/创建知识点树页面
-    │       ├── tree_view.html    # 知识点树展示页（同时显示 JSON 原文和图形化树）
-    │       └── confirm_delete.html  # 删除确认页
+    │   └── tree/
+    │       ├── base.html         # 基础模板，包含全局静态资源加载（jQuery、Bootstrap、sb-admin-2 等）
+    │       ├── index.html        # 知识点树列表页
+    │       ├── edit.html         # 编辑/创建知识点树页面
+    │       ├── tree_view.html    # 知识点树展示页（同时显示 JSON 原文和图形化树）
+    │       └── confirm_delete.html  # 删除确认页
     └── static/
         ├── css/
-        │   └── sb-admin-2.min.css   # 引入 sb-admin-2 的 CSS 文件
+        │   └── sb-admin-2.min.css   # 引入 sb-admin-2 的 CSS 文件
         └── js/
             ├── jquery-3.7.1.min.js    # jQuery 脚本
             ├── sb-admin-2.js          # sb-admin-2 调试版脚本（可选）
             └── sb-admin-2.min.js      # sb-admin-2 压缩版脚本
-
 ```
 
 ## 环境要求
 
 - Python 3.8 及以上
 - Django 3.2 及以上
+- PostgreSQL 12及以上
 
-## 安装
+## 安装步骤
 
 1. **克隆代码**
 
@@ -70,54 +71,54 @@ django_knowledge_tree/
    pip install -r requirements.txt
    ```
 
-## 数据库迁移
+4. **数据库迁移**
 
-在项目根目录下执行：
+   在数据库启动前，需要先运行 PostgreSQL。确保 Docker 中的 PostgreSQL 容器正常运行，具体容器的启动命令可见在Lark上的备份说明。
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+   启动 PostgreSQL 数据库：
 
-## 静态资源
-使用 `python manage.py collectstatic` 生成静态文件集合。
+   ```bash
+   docker run --name postgres -e POSTGRES_USER=klgtree -e POSTGRES_PASSWORD=klgtree123 -e POSTGRES_DB=knowledge_tree -p 5432:5432 -d postgres
+   ```
 
-## 运行项目
+5. **静态文件收集**
 
-在项目根目录下运行：
+   使用 `python manage.py collectstatic` 生成静态文件集合。
 
-```bash
-python manage.py runserver
-```
+6. **运行项目**
 
-浏览器中打开 `http://127.0.0.1:8000/` 即可访问知识点树列表页面。
+   在项目根目录下运行：
 
-## Docker 部署
+   ```bash
+   python manage.py runserver
+   ```
 
-提供了 Dockerfile，可用于构建 Docker 镜像。构建和运行命令示例如下：
+   浏览器中打开 `http://127.0.0.1:8000/` 即可访问知识点树列表页面。
 
-```bash
-docker build -t django_knowledge_tree .
-docker run -p 8000:8000 django_knowledge_tree
-```
+## 数据库备份
+
+当前数据库会定期备份，具体 SQL 文件可以在 Lark 上查看，不再赘述如何安装 PostgreSQL 和 Docker。
+
 ## 其他
 
-- 基于 sb-admin-2 前端模板进行二次开发，前端样式和布局可根据需要自行修改。
+- 目前尚未完成 Docker Compose 配置文件的编写，因此 Docker 部署的服务需要手动启动。
+- 本项目基于 sb-admin-2 前端模板进行二次开发，前端样式和布局可根据需要自行修改。
 - 如果需要扩展其他功能，例如用户认证、权限管理等，请根据 Django 官方文档进行相应配置。
 
+## 使用说明
 
-# 录入格式说明
+### 录入格式说明
 
 本项目中的知识点树数据采用符合 jsTree 组件要求的嵌套 JSON 格式。整个 JSON 数据由一个或多个节点组成，每个节点包含以下主要字段：
 
-- **id**：字符串类型，用于唯一标识该节点。通常可以用类似 "node1", "node1_1" 等方式命名，确保在整个树中唯一。
-- **text**：字符串类型，表示节点要显示的文本内容。
+- **id**：字符串类型，用于唯一标识该节点。
+- **text**：表示节点要显示的文本内容。
 - **children**：数组类型，包含该节点的子节点。如果该节点没有子节点，可以设为一个空数组或省略此字段。
+- **keywords**（可选）：一个数组，包含与该知识点相关的关键词。
 
-## Prompt样例1
+### Prompt样例
 
-如果你希望利用 AI（如 ChatGPT、DeepSeek）生成符合上述格式的 JSON，可以使用类似下面的提示语（Prompt）：
-
+#### Prompt示例1：
 ```markdown
 请严格按照 JSON 格式生成符合 jsTree 规范的知识点树，要求如下：
 
@@ -131,7 +132,6 @@ docker run -p 8000:8000 django_knowledge_tree
    - 叶子节点使用 `"icon": "jstree-file"`。
 
 # 生成结构示例：
-
 ```json
 {
   "id": "root",
@@ -156,26 +156,16 @@ docker run -p 8000:8000 django_knowledge_tree
     }]
   }]
 }
-
-当前需要生成：
-学科领域：______（如：初中物理 / 高中数学）
-教材版本：______（如：人教版 / 北师大版）
-重点标注：______（如：需强调的实验 / 公式 / 定理）
 ```
-（请填入具体的课本名称，例如 “人教版高中英语必修一 (高一上册)”。）
 
-## Prompt样例2
+#### Prompt示例2：
 ```markdown
-你是一名专业的教辅资料整理教师，请生成一份符合 jsTree 格式的 JSON 知识点树，要求如下：  
-- 根节点名称为 "[科目]"。  
+请生成一份符合 jsTree 格式的 JSON 知识点树，要求如下：
+- 根节点名称为 "[科目]"。
 - 根节点下有一个子节点 "{年级+上下册}"。
-- 该子节点下包含多个单元或章节。
-- 每个单元下包含详细的知识点内容。请详细搜索相关教材内容，确保内容尽量完整和准确。  
-- 请确保生成的 JSON 数据结构符合 jsTree 的嵌套格式，并为每个节点指定唯一的 id。  
-- 参考现有的成熟教辅资料和参考书，如曲一线、王后雄等教辅。
-现在要求你生成：《人教版初中日语》的知识点树，以 JSON 格式返回，对于日语这一科目，着重考虑语法点和考点等，请提供完整的从初一到初三的所有课本内容。
+- 每个单元下包含详细的知识点内容。
+- 请确保生成的 JSON 数据结构符合 jsTree 的嵌套格式，并为每个节点指定唯一的 id。
 ```
-
 
 ## changelog
 
@@ -188,38 +178,46 @@ docker run -p 8000:8000 django_knowledge_tree
 ```bash
 docker run --name postgres -e POSTGRES_USER=klgtree -e POSTGRES_PASSWORD=klgtree123 -e POSTGRES_DB=knowledge_tree -p 5432:5432 -d postgres
 ```
-# 数据库备份方法：
 
-在 Docker 容器中，`/temp` 目录通常不存在。
-
-**解决方案**：
+### 备份方法：
 
 1. **使用容器内存在的目录**：
-
-   您可以将备份文件输出到容器内已存在的目录，例如 `/tmp`。
-
-   修改您的命令如下：
-
    ```bash
    docker exec -t postgres pg_dump -U klgtree knowledge_tree -f /tmp/backup.sql
    ```
 
-   这将把备份文件保存到容器内的 `/tmp` 目录。
-
 2. **将备份文件复制到宿主机**：
-
-   备份完成后，您可以使用 `docker cp` 命令将备份文件从容器复制到宿主机：
-
    ```bash
    docker cp postgres:/tmp/backup.sql /path/to/host/backup.sql
    ```
 
-   请将 `/path/to/host/backup.sql` 替换为您希望在宿主机上保存备份文件的路径。
-
 3. **清理容器内的备份文件**：
-
-   备份完成后，您可以删除容器内的临时备份文件：
-
    ```bash
    docker exec postgres rm /tmp/backup.sql
    ```
+
+---
+
+### **产品使用说明书**
+
+#### **概述**
+
+该系统提供一个基于 JSON 存储的知识点树数据结构，用户可以通过图形化界面管理知识点树，并进行编辑、删除等操作。数据以层级结构保存，适用于教育管理和知识点梳理。
+
+#### **功能**
+
+1. **知识点树展示**：系统支持通过 jsTree 展示数据的树形结构，用户可以点击每个节点查看详情。
+2. **创建/编辑功能**：支持创建新的知识点树，编辑现有树形数据，保存时自动格式化 JSON 数据。
+3. **删除功能**：用户可以删除指定的知识点树。
+4. **关键词查看**：每个节点可设置相关关键词，用户点击节点时，相关的关键词将在页面右侧显示。
+
+#### **用户流程**
+
+1. **首页**：用户可查看现有知识点树，点击树名称进入查看详情页面。
+2. **编辑页面**：点击“编辑”按钮，进入编辑页面，可以修改 JSON 数据并保存。编辑器使用 Ace 或 CodeMirror 提供格式化和高亮显示功能。
+3. **查看页面**：点击节点，相关关键词会在页面右侧展示，帮助用户理解节点内容。
+
+#### **使用要求**
+
+- 用户需要登录才能编辑知识点树。
+- 知识点数据存储于 PostgreSQL 数据库，系统支持 Docker 部署，便于本地快速搭建。
